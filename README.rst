@@ -21,14 +21,14 @@ For the Excel Module (Sheets)
 For the Excel Module (Charts)
 --------------------------------
 >>> import MSOffice
->>> xl = MSOffice.Launch.Excel(visible=True, newinstance=True)
+>>> xl = MSOffice.Launch.Excel(visible=True, newinstance=True) # existinginstance=True
 >>> sht = MSOffice.Worksheets.Sheet(xl)
 >>> sht.addWorkbook() # Adds the default sheet called "Sheet1"
 >>> from MSOffice.Excel.Charts import XlGraphs
 >>> Graphs = XlGraphs(xl, sht)
-# There are some x values in the Excel range "A2:A10"
+>>> # There are some x values in the Excel range "A2:A10"
 >>> x_range = "='%s'!%s%d:%s%d" % ("Sheet1", "A", 2, "A", 10)
 >>> Graphs.Create_Chart("My new chart", x_range)
-# To add a chart as shape inside an existing sheet, add the paramtersheetname
-# to Create_Chart, for example, sheetname="Name of existing sheet"
+>>> # To add a chart as shape inside an existing sheet, add the paramtersheetname
+>>> # to Create_Chart, for example, sheetname="Name of existing sheet"
 >>> Graphs.Add_Series("My new chart", "B2:B10", serieslabels=True) # Series (y) values in column B
