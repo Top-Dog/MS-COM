@@ -8,7 +8,6 @@ This is designed to be an automation package capable of automating those tedious
 
 Usage Examples:
 ----------------
-----------------
 
 For the Excel Module (Sheets)
 --------------------------------
@@ -26,7 +25,7 @@ For the Excel Module (Sheets)
 
 For the Excel Module (Charts)
 --------------------------------
->>>	# StartUp
+>>> # StartUp
 >>> xl = MSOffice.Launch.Excel(visible=True, newinstance=True) # existinginstance=True
 >>> sht = MSOffice.Worksheets.Sheet(xl)
 >>> sht.addWorkbook() # Adds the default sheet called "Sheet1"
