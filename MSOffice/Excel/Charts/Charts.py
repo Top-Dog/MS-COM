@@ -91,7 +91,8 @@ class XlGraphs(object):
         self.ChartObjects[chartIndex][2].append(yRange)
         seriesIndex = len(self.ChartObjects[chartIndex][2])
         
-        chart.SeriesCollection().Add(Source=yRange, Rowcol=c.xlColumns, SeriesLabels=kwargs.get("serieslabels", False)) # Assume the data is in columns and that the selction is only data (no column/row headings)
+        chart.SeriesCollection().Add(Source=yRange, Rowcol=c.xlColumns, 
+            SeriesLabels=kwargs.get("serieslabels", False), CategoryLabels=kwargs.get("categorylabels", False)) # Assume the data is in columns and that the selction is only data (no column/row headings)
         chart.SeriesCollection(seriesIndex).XValues = xRange
         chart.DisplayBlanksAs = c.xlNotPlotted
         
