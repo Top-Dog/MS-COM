@@ -138,7 +138,7 @@ class Sheet(object):
     def remove_dup_WBO(self, wboname):
         initalstate = self.xlInst.xlApp.DisplayAlerts
         self.xlInst.xlApp.DisplayAlerts = False
-        if self.xlInst.duplicate_WBO(wboname):
+        if self.duplicate_WBO(wboname):
             for sheet in self.xlInst.xlBook.Sheets:
                 if sheet.Name == wboname:
                     sheet.Delete() 
