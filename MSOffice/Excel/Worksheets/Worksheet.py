@@ -159,7 +159,7 @@ class Sheet(object):
         """Adds a new chart object (as a sheet), to the right of all existing sheets"""
         self.remove_dup_WBO(chartname)
         #lastChart = self.xlInst.getLastWBO("Charts")
-        lastSheet = self.xlInst.getLastWBO("Sheets") # gets both worksheet and chart objects aka "sheets"
+        lastSheet = self.getLastWBO("Sheets") # gets both worksheet and chart objects aka "sheets"
         
         # Need a two step approach, else adding a chart to the end of a workbook doesn't work
         chart = self.xlInst.xlBook.Charts.Add()
@@ -174,7 +174,7 @@ class Sheet(object):
             chart.ChartType = chartType # This needs to be seperate, else it doesn't work (also two variations of the property: .ChartType and .Type)
         #self.xlInst.number_charts += 1
         # Rename the new chart/sheet
-        lastChart = self.xlInst.getLastWBO("Charts", chartname) 
+        lastChart = self.getLastWBO("Charts", chartname) 
 
         return lastChart
 
