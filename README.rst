@@ -6,10 +6,9 @@ Currently the following applications have modules:
 
 This is designed to be an automation package capable of automating those tedious jobs nobody wants to do. It is great for repeat tasks or quick hacks to filter and present data.
 
-<h1>Usage Examples:</h1>
+**Usage Examples:**
 ----------------
-<h2>Excel</h2>
-<h3>For the Excel Module (Sheets)</h3>
+*For the Excel Module (Sheets)*
 --------------------------------
 >>> import MSOffice
 >>> xl = MSOffice.Launch.Excel(visible=True, newinstance=True)
@@ -23,7 +22,7 @@ This is designed to be an automation package capable of automating those tedious
 >>> xl.closeApplication()
 >>> del xl
 
-<h3>For the Excel Module (Charts)</h3>
+*For the Excel Module (Charts)*
 --------------------------------
 >>> # StartUp
 >>> xl = MSOffice.Launch.Excel(visible=True, newinstance=True) # existinginstance=True
