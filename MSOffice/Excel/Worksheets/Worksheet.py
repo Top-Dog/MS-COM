@@ -157,7 +157,7 @@ class Sheet(object):
         
     def addChart(self, chartname, chartType):
         """Adds a new chart object (as a sheet), to the right of all existing sheets"""
-        self.xlInst.remove_dup_WBO(chartname)
+        self.remove_dup_WBO(chartname)
         #lastChart = self.xlInst.getLastWBO("Charts")
         lastSheet = self.xlInst.getLastWBO("Sheets") # gets both worksheet and chart objects aka "sheets"
         
