@@ -24,9 +24,9 @@ if __name__ == "__main__":
 	
 	# For Excel (fill the cache so we can use constatns with late binding)
 	argv = ["makepy", r"C:\Program Files (x86)\Microsoft Office\Office14\Excel.exe"]
-	try:
-		makepy.main()
-	except:
+	makepy.main()
+	userin = raw_input("Did the defintions successfuly build?")
+	if userin.lower() in ("no", "n"):
 		argv= [""]
 		print "Choose Microsoft Excel 14.0 Object Library (1.7)"
 		makepy.main()
