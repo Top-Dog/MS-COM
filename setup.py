@@ -25,8 +25,8 @@ if __name__ == "__main__":
 	# For Excel (fill the cache so we can use constatns with late binding)
 	sys.argv = ["makepy", r"C:\Program Files (x86)\Microsoft Office\Office14\Excel.exe"]
 	makepy.main()
-	userin = raw_input("Did the defintions successfuly build?")
+	userin = raw_input("Did the defintions successfuly build? You should see 'Importing module' as the last line in the console if it did. Type y/n and press enter. ")
 	if userin.lower() in ("no", "n"):
 		sys.argv= [""]
-		print "Choose Microsoft Excel 14.0 Object Library (1.7)"
+		print "Choose: Microsoft Excel 14.0 Object Library (1.7)"
 		makepy.main()
