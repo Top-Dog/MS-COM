@@ -3,8 +3,8 @@ import sys
 from win32com.client import makepy
 
 def readme():
-    with open('README.rst') as f:
-        return f.read()
+	with open('README.rst') as f:
+		return f.read()
 
 if __name__ == "__main__":
 	setup(name='MS Office pyCOM',

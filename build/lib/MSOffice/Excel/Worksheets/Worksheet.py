@@ -456,7 +456,7 @@ class Sheet(object):
         # At some point this function was modified to no longer except excel ranges as valid ranges, instead supply row and col details
         '''Search through the spreadsheet for searchTerm [exact match]. Returns
         a list of cell objects for all the matches found.'''
-        sht = self.getSheet(shtRange.sheet)
+        sht = self.xlInst.getSheet(shtRange.sheet)
         if shtRange.xlrange is not None:
             r1 = shtRange.xlrange
         else:
@@ -541,7 +541,7 @@ class Sheet(object):
 
     def newGraph(self, feederID, xValues, titles):
         zoneSubID = feederID[:3]
-        sht = self.getSheet(feederID=feederID)
+        sht = self.xlInst.getSheet(feederID=feederID)
         
         shape = sht.Shapes.AddChart()
         chart = shape.Chart
@@ -608,7 +608,7 @@ class Sheet(object):
         
     def addSeries(self, shtName, chartNumber, xval, yval):
         '''Adds a new series to an exsisting chart'''
-        sht = self.getSheet(feederID=shtName)
+        sht = self.xlInst.getSheet(feederID=shtName)
         shape = sht.Shapes(chartNumber)
         chart = shape.Chart
         numSeries = chart.SeriesCollection().Count
@@ -621,7 +621,7 @@ class Sheet(object):
 
     def arrangeCharts(self, feederID, widths, heights, offset, chartOffset=0):
         '''Arranges the charts in block grid fashion'''
-        sht = self.getSheet(feederID=feederID)
+        sht = self.xlInst.getSheet(feederID=feederID)
         numCharts = sht.ChartObjects().Count
         
         #width = 360 # Width to set each chart
