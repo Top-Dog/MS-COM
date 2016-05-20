@@ -198,3 +198,67 @@ class Excel(object):
 		"""Closes the currently attached instanace, but leaves the window running"""
 		self.xlApp = None
 		del self.xlApp
+
+
+class Instances(object):
+	def __init__(self, name):
+		self.appname = name
+		self.filepath = ""
+
+
+class Excel_Handler(object):
+	Instances = []
+
+# OOP: https://jeffknupp.com/blog/2014/06/18/improve-your-python-python-classes-and-object-oriented-programming/
+class Excel_Instance(Excel_Handler):
+	def __init__(self, **kwargs):
+		self.xlAPP = None
+
+		app_id = kwargs.get("index", 0)
+		app_book = kwargs.get("book", None)
+
+		if app_book:
+			xlBook = GetObject(os.path.join(os.path.abspath(__file__), app_book))
+			self.xlAPP = xlBook.Application
+		elif app_id > 0:
+			pass
+		else:
+			self.xlAPP = DispatchEx("Excel.Application")
+
+		# Set the visibility of the new instance, defaults to visible
+		self.set_visibility(kwargs.get("visible", True))
+
+		# See if we find the current book in any of the excel bokks that are open
+		for xlapp in xlAPPs:
+			for xlbook in xlapp.Workbooks:
+				if xlbook.Name == app_book:
+					pass
+
+
+	def __repr__(self):
+		return "Excel: %s" % self.name
+
+	#def number_instances(self):
+	#	return 0
+
+	def set_visibility(self, status):
+		self.xlAPP.Visible = status
+
+	def close(self):
+		pass
+
+class Excel_Book(): # Excel_Instance
+	def __init__(self):
+		self.xlBOOK = None
+
+	def new_book(self, filename):
+		pass
+
+	def get_book(self, filename):
+		pass
+
+	def set_visibility(self, status):
+		self.xlBOOK.Visible = status
+
+	def close(self):
+		pass

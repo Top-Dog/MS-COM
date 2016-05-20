@@ -485,7 +485,7 @@ class Sheet(object):
         Search for the FIRST instance of a searchterm
         """
         SearchTermOffset = 0 # returns the 1st search result
-        SearchResults = self.xlInst.search(shtRange(SheetName, None, 1, 1, 1000, 1000), 
+        SearchResults = self.search(shtRange(SheetName, None, 1, 1, 1000, 1000), 
                                 SearchTerm)
         if len(SearchResults):
             return SearchResults[SearchTermOffset]
@@ -500,7 +500,7 @@ class Sheet(object):
         ColumnList = []
         LastRow = self.xlInst.brief_search(SheetName, SearchTerms[0]).Row
         for term in SearchTerms:
-            result = self.xlInst.brief_search(SheetName, term)
+            result = self.brief_search(SheetName, term)
             assert result is not None, "Error: can not find the column (%s)" % term
             assert result.Row == LastRow, "Error: search tags span multiple rows"
             LastRow = result.Row
