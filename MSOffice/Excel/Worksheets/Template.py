@@ -1,5 +1,5 @@
-import MSOffice
-from Worksheet import shtRange
+import MSOffice, time
+from Worksheet import Sheet, shtRange
 
 class Template(object):
 	"""Copy tables from a existing source document an place them
@@ -19,6 +19,12 @@ class Template(object):
 		self.Dest_Col = DestPos.Column
 		self.Sheet_Obj = DestPos.Worksheet
 
+		xlInst = MSOffice.Excel.Launch.Excel(visible=True, runninginstance=True, appname=??)
+		self.xlSheetDest = Sheet(xlInst)
+		# Get the next object up..
+		print DestPos.parent.Parent.Name
+
+
 		# Open the template, and test that the named template exists
 		try:
 			TemplateSheet = self._Open_Template(template_name)
@@ -32,7 +38,16 @@ class Template(object):
 		SearchRange = shtRange(self.Sheet_Obj.Name, None, self.Dest_Row, self.Dest_Col, self.Dest_Row+self.Size_Rows, self.Dest_Col+self.Size_Cols)
 		for keyword, value in keymap.iteritems():
 			# Find all the cells with this placeholder keyword
-			CellList = self.xlSheetDest.search(SearchRange, "key_"+keyword)
+			print "wait 1.."
+			time.sleep(5)
+			try:
+				CellList = self.xlSheetDest.search(SearchRange, "key_"+keyword)
+			except Exception as ex:
+				print ex
+				time.sleep(5)
+				print "wait 2"
+				traceback.print_exc() 
+			time.sleep(10000)
 			# Update all the cells with this placeholder keyword
 			for cell in CellList:
 				cell.Value = value
