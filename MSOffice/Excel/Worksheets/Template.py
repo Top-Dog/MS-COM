@@ -4,9 +4,8 @@ from Worksheet import shtRange
 class Template(object):
 	"""Copy tables from a existing source document an place them
 	in a working document."""
-	def __init__(self, xlSheetDest, TemplateFileName):
-		#self.template_dir = template_dir
-		self.xlSheetDest = xlSheetDest
+	def __init__(self, DestSheetInst, TemplateFileName):
+		self.xlSheetDest = DestSheetInst
 		self.TemplateFileName = TemplateFileName
 		self.Dest_Row = 0
 		self.Dest_Col = 0
@@ -14,8 +13,8 @@ class Template(object):
 		self.Size_Cols = 0
 
 	def Place_Template(self, template_name, DestPos):
-		self.CurrentTemplateName = template_name
 		# DestPos is the destination postion as an excel range object
+		self.CurrentTemplateName = template_name
 		self.Dest_Row = DestPos.Row
 		self.Dest_Col = DestPos.Column
 		self.Sheet_Obj = DestPos.Worksheet
