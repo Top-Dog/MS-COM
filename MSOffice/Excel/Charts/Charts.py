@@ -30,12 +30,10 @@ class XlGraphs(object):
 		a filepath to an existing template (.crtx)."""
 		sheetname = kwargs.get('sheetname', '')
 		if sheetname:
-			# Add a new shape object
-			self.xlInst.xlBook.Sheets(sheetname).Select() # must do this before selecting a range
-			self.xlInst.xlBook.Sheets(sheetname).Range(xRange).Select() 
+			# Add a new shape object 
 			shape = self.Sheet.getSheet(sheetname).Shapes.AddChart()
 			chart = shape.Chart
-			#chart.SetSourceData(Source=xRange) # Reduce the number of pre included series to speed things up - doesn't work?? maybe need to add series first..?
+			chart.SetSourceData(Source=self.xlInst.xlBook.Sheets(sheetname).Range(xRange)) # This will limit the number of pre-included series, which makes things MUCH faster
 			for series in chart.SeriesCollection():
 				series.Delete()
 			shape.Name = chartName
@@ -99,9 +97,9 @@ class XlGraphs(object):
 		chart.SeriesCollection(seriesIndex).ChartType = kwargs.get("seriestype", chart.ChartType) # You can style individual series' on the chart (might break if a template is used to create the chart)
 		#chart.Type = c.xlLine or c.xlAreaStacked
 		
-		if kwargs.get('seriesname'):
+		if kwargs.get('seriesname', ''):
 			chart.HasLegend = True
-			chart.SeriesCollection(seriesIndex).Name = kwargs.get('seriesname')
+			chart.SeriesCollection(seriesIndex).Name = kwargs.get('seriesname', '<no name supplied>')
 			
 	def Apply_Template(self, chartName, filename, **kwargs):
 		"""Applies an exsting template, stored as a file, to an existing chart object.
@@ -125,13 +123,28 @@ class XlGraphs(object):
 			shape = chartStruct[0][0]
 			if shape is not None:
 				shapeName = shape.Name
+			else:
+				shapeName = ""
 			chart = chartStruct[0][1]
 			if chart.Name == chartName or shapeName == chartName:
 				break
 			chartIndex += 1
 		assert chartIndex < len(self.ChartObjects), "Could not find a chart matching the supplied chart name"
 		return chartIndex
-		
+
+	def Chart_Exists(self, chartName):
+		chartIndex = 0
+		for chartStruct in self.ChartObjects: # [(shape, chart), xRange, []]
+			shape = chartStruct[0][0]
+			if shape is not None:
+				shapeName = shape.Name
+			else:
+				shapeName = ""
+			chart = chartStruct[0][1]
+			if chart.Name == chartName or shapeName == chartName:
+				return True
+		return False
+
 	def _Unpack_Chart(self, **kwargs):
 		"""Not fully implemented, but will return only the requested parameters."""
 		if kwargs.get("chartName"):

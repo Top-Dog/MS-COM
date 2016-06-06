@@ -63,6 +63,7 @@ class Excel(object):
 				print "Could not attach to any %s" % AppName
 				return
 			except:
+				# Produces a com_error if the file is not avliable
 				self.xlApp = GetObject(Class=AppName)
 				self.xlBook = self.xlApp.ActiveWorkbook
 		else:
