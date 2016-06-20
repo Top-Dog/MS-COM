@@ -119,6 +119,7 @@ class Excel(object):
 			self.launchiHistorian()
 		
 		self.xlApp.Visible = visible
+		self.FinalTests()
 		
 		# (win32com.client)
 		# Dispatch
@@ -152,6 +153,15 @@ class Excel(object):
 		self.xlApp.RegisterXLL(iHistorianPath)
 		self.xlApp.Workbooks(iHistorianPath.split("\\")[-1]).RunAutoMacros = True
 		self.xlApp.DisplayAlerts = True
+
+	def FinalTests(self):
+		"""Ensure a static proxy exists"""
+		try:
+			c.xlDown
+		except:
+			from win32com.client import makepy
+			sys.argv = ["makepy", r"C:\Program Files (x86)\Microsoft Office\Office14\Excel.exe"]
+			makepy.main ()
 		
 		
 	def save(self, newfilepath=None):

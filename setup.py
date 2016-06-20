@@ -15,7 +15,7 @@ if __name__ == "__main__":
 		  author="Sean D. O'Connor",
 		  author_email='sdo51@uclive.ac.nz',
 		  license='MIT',
-		  packages=['MSOffice', 'MSOffice.Excel.Charts', 'MSOffice.Excel.Worksheets'],
+		  packages=['MSOffice', 'MSOffice.Excel', 'MSOffice.Excel.Charts', 'MSOffice.Excel.Worksheets'],
 		  install_requires=['numpy', 'pypiwin32', 'pyodbc', 'six', 'wheel', 'virtualenv'], #pywin32
 		  dependency_links=[], 
 		  zip_safe=False,
