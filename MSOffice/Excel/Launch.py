@@ -116,7 +116,10 @@ class Excel(object):
 				self.xlBook = self.xlApp.ActiveWorkbook
 			
 			# Launch the iHistorian Excel plug-in separately (no plug-ins are launched with the Excel COM object)
-			self.launchiHistorian()
+			try:
+				self.launchiHistorian()
+			except:
+				pass
 		
 		self.xlApp.Visible = visible
 		self.FinalTests()
