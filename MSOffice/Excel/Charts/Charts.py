@@ -273,7 +273,19 @@ class XlGraphs(object):
 		
 		
 	def Set_Position(self, chartName, x, y):
-		"""Set the x and y postion of the top left corner of a shape object in a sheet.
+		"""Set the x and y postion of the top left corner of a shape object in the current sheet.
+		Origin is the top left corner of the sheet."""
+		chartIndex = self._Get_Chart_Index(chartName)
+		shape = self.ChartObjects[chartIndex][0][0] # Get the subsclass of the shape.. the chart
+		chart = self.ChartObjects[chartIndex][0][1] # Get the chart object itself
+		#if chart is not None:
+		#	chart.Location(c.xlLocationAsNewSheet, "sheet name")
+		if shape is not None:
+			shape.Left = x
+			shape.Top = y
+
+	def Set_2nd_Position(self, sheetname, chartName, x, y):
+		"""Set the x and y postion of the top left corner of a shape object in any sheet.
 		Origin is the top left corner of the sheet."""
 		chartIndex = self._Get_Chart_Index(chartName)
 		shape = self.ChartObjects[chartIndex][0][0] # Get the subsclass of the shape.. the chart
