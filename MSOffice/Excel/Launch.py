@@ -98,7 +98,7 @@ class Excel(object):
 					#self.xlBook = self.xlApp.Workbooks.Open(self.filename)
 					self.xlBook = GetObject(self.filename) # This looks like it is opening new files in an existing instance regardless of the newinstance variable being set
 					self.xlApp = self.xlBook.Application
-					self.xlApp.Windows(self.xlBook.Name).Visible = kwargs.get("BookVisible", True) # The visibility of the workbook in the instace of excel
+					#self.xlApp.Windows(self.xlBook.Name).Visible = kwargs.get("BookVisible", True) # The visibility of the workbook in the instace of excel
 				except com_error:
 					# The file does not exist...
 					if self.xlApp:
@@ -121,6 +121,7 @@ class Excel(object):
 			except:
 				pass
 		
+		self.xlApp.Windows(self.xlBook.Name).Visible = kwargs.get("BookVisible", True) # The visibility of the workbook in the instace of excel
 		self.xlApp.Visible = visible
 		self.FinalTests()
 		
@@ -188,6 +189,7 @@ class Excel(object):
 		self.xlApp.DisplayAlerts = IntialAlertState # Probably be set back to true, but maybe not
 
 	def closeWorkbook(self, SaveChanges=0):
+		self.xlApp.Windows(self.xlBook.Name).Visible = True
 		self.xlBook.Close(SaveChanges) # Avoids a prompt when closing out
 		#self.xlApp.Quit()
 		#self.xlApp.Windows(self.xlBook.Name).Visible = 0
@@ -200,6 +202,7 @@ class Excel(object):
 		numberOfBooks = 0
 		for book in self.xlApp.Windows:
 			numberOfBooks += 1
+			self.xlApp.Windows(self.xlBook.Name).Visible = True
 			book.Close(SaveChanges=0)
 		#self.xlBook.Close(SaveChanges=0) # Avoids a prompt when closing out
 
