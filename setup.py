@@ -11,7 +11,7 @@ if __name__ == "__main__":
 		  version='0.1',
 		  description='A python wrapper for MS Excel VBA WinCOM32 API',
 		  long_description=readme(),
-		  url='some github url (update this!)',
+		  url='https://github.com/Top-Dog/MS-COM',
 		  author="Sean D. O'Connor",
 		  author_email='sdo51@uclive.ac.nz',
 		  license='MIT',

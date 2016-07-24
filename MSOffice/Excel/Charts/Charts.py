@@ -112,7 +112,7 @@ class XlGraphs(object):
 			
 		# Set the title
 		chart.HasTitle = True
-		chart.SetElement(1) # can't access the 'mso' consts msoElementChartTitleCenteredOverlay
+		chart.SetElement(2) # can't access the 'mso' consts: msoElementChartTitleCenteredOverlay (1), or msoElementChartTitleAboveChart (2)
 		chart.ChartTitle.Text = chartName
 		
 		self.Chart_Layout(chart, kwargs)
@@ -167,6 +167,8 @@ class XlGraphs(object):
 		if kwargs.get('ylabel'):
 			chart.Axes(c.xlValue, c.xlPrimary).HasTitle = True
 			chart.Axes(c.xlValue, c.xlPrimary).AxisTitle.Text = kwargs.get('ylabel')
+			if kwargs.get('ylabelsize'):
+				chart.Axes(c.xlValue, c.xlPrimary).AxisTitle.Format.TextFrame2.TextRange.Font.Size = kwargs.get('ylabelsize') 
 		
 		# Optional: Add scaling limits, steps to y (category) axes
 		if kwargs.get('ymin'):
