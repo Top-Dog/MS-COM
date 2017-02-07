@@ -1,6 +1,5 @@
 from setuptools import setup, find_packages
 import sys
-from win32com.client import makepy
 
 def readme():
 	with open('README.rst') as f:
@@ -21,7 +20,7 @@ if __name__ == "__main__":
 		  zip_safe=False,
 		  #packages=find_packages()
 		  )
-	
+	from win32com.client import makepy
 	# For Excel (fill the cache so we can use constatns with late binding)
 	sys.argv = ["makepy", r"C:\Program Files (x86)\Microsoft Office\Office14\Excel.exe"]
 	makepy.main()
