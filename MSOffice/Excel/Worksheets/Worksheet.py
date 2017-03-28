@@ -141,7 +141,7 @@ class Sheet(object):
 		newlist = self.getRange(sheet, row, col1, row, col2)
 		return [item for item in newlist]
 
-	def alpha2number(columnletters):
+	def alpha2number(self, columnletters):
 		"""Given a string represeenting the column in excel,
 		return a number representing the column indice."""
 		offset = 0
