@@ -131,6 +131,25 @@ class Sheet(object):
 
 		return nextrow
 
+	def getCol(self, sheet, col, row1, row2):
+		"""Return a list of values corrosponding to a column in excel"""
+		newlist = self.getRange(sheet, row1, col, row2, col)
+		return [item[0] for item in newlist]
+
+	def getRow(self, sheet, row, col1, col2):
+		"""Return a list of values corrosponding to row in excel"""
+		newlist = self.getRange(sheet, row, col1, row, col2)
+		return [item for item in newlist]
+
+	def alpha2number(columnletters):
+		"""Given a string represeenting the column in excel,
+		return a number representing the column indice."""
+		offset = 0
+		for letter in columnletters:
+			offset *= 26 # Base counting system
+			offset += ord(letter.lower()) - 96 # ASCII offset of 'a'
+		return offset
+
 	def duplicate_WBO(self, newobjectname):
 		"""Checks if a chart or sheet with the same
 		name already exists"""
