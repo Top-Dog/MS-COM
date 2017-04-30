@@ -217,6 +217,15 @@ class Excel(object):
 		self.xlApp = None
 		del self.xlApp
 
+	def SaveAsWebPage(self, sheetname, filepath):
+		"""Saves a single Excel sheet as a web page. Usefull for extracting charts as images"""
+		if not os.path.exists(filepath):
+			os.mkdir(filepath)
+		Publisher = self.xlBook.PublishObjects.Add(c.xlSourceSheet, 
+											 os.path.join(filepath, sheetname+".htm"), 
+											 sheetname, "", c.xlHtmlStatic, "Main name", "")
+		Publisher.Publish(True) # Setting True overwrites any existing published web page
+
 
 class Instances(object):
 	def __init__(self, name):
