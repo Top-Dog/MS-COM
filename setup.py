@@ -37,11 +37,13 @@ if __name__ == "__main__":
 	sys.argv = ["makepy", r"C:\Program Files (x86)\Microsoft Office\Office14\Excel.exe"]
 	with Capturing() as printoutput:
 		makepy.main()
-	if printoutput[0].startswith("Could not locate a type library matching"):
-		sys.argv = ["makepy", r"C:\Program Files (x86)\Microsoft Office\Office16\Excel.exe"]
-		with Capturing() as printoutput:
-			makepy.main()
-	if printoutput[0].startswith("Could not locate a type library matching"):
-		sys.argv= [""]
-		print "Choose: Microsoft Excel 14.0 Object Library (1.7), or Excel 16.0 Object Library (1.9)"
-		makepy.main()
+	if len(printoutput):
+		if printoutput[0].startswith("Could not locate a type library matching"):
+			sys.argv = ["makepy", r"C:\Program Files (x86)\Microsoft Office\Office16\Excel.exe"]
+			with Capturing() as printoutput:
+				makepy.main()
+		if len(printoutput):
+			if printoutput[0].startswith("Could not locate a type library matching"):
+				sys.argv= [""]
+				print "Choose: Microsoft Excel 14.0 Object Library (1.7), or Excel 16.0 Object Library (1.9)"
+				makepy.main()
