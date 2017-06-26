@@ -18,6 +18,7 @@ as saving, deletion, and closing the running instance.
 import sys, time, pythoncom, os, datetime
 from collections import namedtuple, deque
 from pywintypes import com_error
+from cStringIO import StringIO
 import math
 import numpy as np
 import pywintypes
@@ -31,6 +32,17 @@ from win32com.client import constants as c, Dispatch, DispatchEx, GetObject
 sys.path.append(r'C:\Python27\lib\site-packages\win32com')
 # PS H:\> [System.Environment]::SetEnvironmentVariable("PYTHONPATH", "C:\Python27;C:\Python27\DLLs;C:\Python27\Lib\lib-tk;
 # C:\Users\sdo\Documents\eclipse workspace\Zone Substation Trending;","User")
+
+class Capturing(list):
+	"""Capture print output to std out"""
+	def __enter__(self):
+		self._stdout = sys.stdout
+		sys.stdout = self._stringio = StringIO()
+		return self
+	def __exit__(self, *args):
+		self.extend(self._stringio.getvalue().splitlines())
+		del self._stringio    # free up some memory
+		sys.stdout = self._stdout
 
 #################################################
 ####### Excel spesfic application launcher ######
@@ -166,9 +178,25 @@ class Excel(object):
 		except:
 			from win32com.client import makepy
 			sys.argv = ["makepy", r"C:\Program Files (x86)\Microsoft Office\Office14\Excel.exe"]
-			makepy.main ()
-		
-		
+			with Capturing() as printoutput:
+				makepy.main()
+			if len(printoutput):
+				if printoutput[0].startswith("Could not locate a type library matching"):
+					sys.argv = ["makepy", r"C:\Program Files (x86)\Microsoft Office\Office16\Excel.exe"]
+					with Capturing() as printoutput:
+						makepy.main()
+			if len(printoutput):
+				if printoutput[0].startswith("Could not locate a type library matching"):
+					sys.argv= [""]
+					print "Choose: Microsoft Excel 14.0 Object Library (1.7), or Excel 16.0 Object Library (1.9)"
+					with Capturing() as printoutput:
+						makepy.main()
+					if len(printoutput):
+						if printoutput[0].startswith("Could not locate a type library matching"):
+							print "Could not create a win32 proxy for Excel. Stopping now."
+							time.sleep(5)
+							sys.exit()
+
 	def save(self, newfilepath=None):
 		IntialAlertState = self.xlApp.DisplayAlerts
 		self.xlApp.DisplayAlerts = False
