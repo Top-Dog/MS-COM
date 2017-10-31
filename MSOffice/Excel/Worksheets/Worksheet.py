@@ -150,6 +150,13 @@ class Sheet(object):
 			offset += ord(letter.lower()) - 96 # ASCII offset of 'a'
 		return offset
 
+	def setFormat(self, sheet, row1, col1, row2, col2, format):
+		"""Sets the formating of the cells included in 'range'
+		to the desired format."""
+		sht = self.xlInst.xlBook.Worksheets(sheet)
+		sht.Range(sht.Cells(row1, col1),
+				   sht.Cells(row2, col2)).NumberFormat = format
+
 	def duplicate_WBO(self, newobjectname):
 		"""Checks if a chart or sheet with the same
 		name already exists"""

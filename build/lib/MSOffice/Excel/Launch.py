@@ -33,6 +33,8 @@ sys.path.append(r'C:\Python27\lib\site-packages\win32com')
 # PS H:\> [System.Environment]::SetEnvironmentVariable("PYTHONPATH", "C:\Python27;C:\Python27\DLLs;C:\Python27\Lib\lib-tk;
 # C:\Users\sdo\Documents\eclipse workspace\Zone Substation Trending;","User")
 
+# We use this class to capture output 'printed' by another module.
+# This output affects the control flow of the program
 class Capturing(list):
 	"""Capture print output to std out"""
 	def __enter__(self):
