@@ -489,14 +489,17 @@ class Sheet(object):
 
 	def search(self, shtRange, searchTerm, **kwargs):
 		# At some point this function was modified to no longer except excel ranges as valid ranges, instead supply row and col details
-		'''Search through the spreadsheet for searchTerm [exact match]. Returns
-		a list of cell objects for all the matches found.'''
+		"""
+		Search through the spreadsheet for searchTerm [exact match]. Returns
+		a list of cell objects for all the matches found.
+		"""
 		sht = self.getSheet(shtRange.sheet)
 		if shtRange.xlrange is not None:
 			r1 = shtRange.xlrange
 		else:
 			r1 = sht.Range(sht.Cells(shtRange.row1, shtRange.col1), sht.Cells(shtRange.row2, shtRange.col2))
-		cell = r1.Find(What=searchTerm, LookAt=c.xlWhole, MatchCase=kwargs.get("MatchCase", False))
+		cell = r1.Find(What=searchTerm, LookAt=c.xlWhole, MatchCase=kwargs.get("MatchCase", False), 
+			LookIn=(c.xlValues if kwargs.get("Formula") else c.xlFormulas))
 		searchResults = [] # store a list of cells that match the search criteria
 		
 		if cell:
@@ -533,7 +536,7 @@ class Sheet(object):
 		@return: A tuple of the (x,y) coordinates of the cells NB: this is (col,row)
 		"""
 		ColumnList = []
-		LastRow = self.xlInst.brief_search(SheetName, SearchTerms[0]).Row
+		LastRow = self.brief_search(SheetName, SearchTerms[0]).Row
 		for term in SearchTerms:
 			result = self.brief_search(SheetName, term)
 			assert result is not None, "Error: can not find the column (%s)" % term
@@ -546,7 +549,7 @@ class Sheet(object):
 	def find_all(self, SheetName, SearchTerm):
 		'''Finds all the cells that match  search string (wild card is asterix)
 		and return them as list of cell references.'''
-		results = self.xlInst.search(shtRange(SheetName, None, 1, 1, 10000, 10000), 
+		results = self.search(shtRange(SheetName, None, 1, 1, 10000, 10000), 
 							  SearchTerm)
 
 	def checkEqual(self, iterator):
