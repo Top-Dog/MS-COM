@@ -1,8 +1,8 @@
-'''
+"""
 Created on 30/3/2016
 
 @author: Sean D. O'Connor
-'''
+"""
 
 import sys, time, pythoncom, os, datetime
 from collections import namedtuple, deque
@@ -19,7 +19,9 @@ shtRange = namedtuple('xlrange', 'sheet xlrange row1 col1 row2 col2')
 Cell = namedtuple('Cell', 'sheet row col')
 
 class Sheet(object):
-	"""A class for working on excel sheet objects"""
+	"""
+	A class for working on excel sheet objects.
+	"""
 	def __init__(self, xlInstance):
 		self.xlInst = xlInstance
 		
@@ -27,21 +29,27 @@ class Sheet(object):
 		return "Excel Book: " + self.xlInst.xlBook.Name
 
 	def activateSheet(self, sheetname):
-		'''Set the named sheet as the currently active sheet'''
+		"""
+		Set the named sheet as the currently active sheet.
+		"""
 		self.xlInst.xlBook.Sheets(sheetname).Activate()
 		return self.xlBook.ActiveSheet
 
 	def renameSheet(self, newname, sheetname=''):
-		'''Renames the currently active excel sheet. Excel 2010
+		"""
+		Renames the currently active excel sheet. Excel 2010
 		opens only 1 sheet at startup, so this will rename the
-		default sheet.Takes a string as an argument.'''
+		default sheet.Takes a string as an argument.
+		"""
 		if sheetname:
 			self.xlInst.xlBook.Sheets(sheetname).Name = newname
 		else:
 			self.xlInst.xlBook.ActiveSheet.Name = newname
 
 	def getActiveSheetName(self):
-		"""Returns the name of the currently active sheet"""
+		"""
+		Returns the name of the currently active sheet.
+		"""
 		return self.xlInst.xlBook.ActiveSheet.Name
 		
 	def getSheet(self, sheetName):
@@ -56,8 +64,10 @@ class Sheet(object):
 		return sht.Cells(row, col).End(c.xlToRight).Column
 
 	def getNextCol(self, sheetname, col, row):
-		"""Looks for the next column with something in it. Useful
-		if looking for next column over an unknown number of blank cells. """
+		"""
+		Looks for the next column with something in it. Useful
+		if looking for next column over an unknown number of blank cells.
+		"""
 		sht = self.xlInst.xlBook.Worksheets(sheetname)
 		#self.xlInst.xlApp.SendKeys("^{DOWN}", True) # Simulates: CTRL + DOWN ARROW, block until operation completes
 		nextcol = sht.Cells(row, col).End(c.xlToRight).Column
@@ -74,7 +84,9 @@ class Sheet(object):
 		return nextcol
 
 	def getNextFreeCol(self, sheetname, col, row):
-		"""Looks for the next column with nothing in it."""
+		"""
+		Looks for the next column with nothing in it.
+		"""
 		sht = self.xlInst.xlBook.Worksheets(sheetname)
 		nextcol = sht.Cells(row, col).End(c.xlToRight).Column
 		#while nextcol < 16384:
@@ -93,8 +105,10 @@ class Sheet(object):
 		return nextcol
 
 	def insertCol(self, sheetName, column):
-		"""Insert a column to the left of the spesfied column.
-		@param column: a letter code describing a column in Excel or number in the range 1 to n"""
+		"""
+		Insert a column to the left of the spesfied column.
+		@param column: a letter code describing a column in Excel or number in the range 1 to n
+		"""
 		if type(column) == int:
 			colLetter = self.num_to_let(column)
 		else:
@@ -102,8 +116,10 @@ class Sheet(object):
 		self.xlInst.xlBook.Worksheets(sheetName).Columns("%s:%s" % (colLetter, colLetter)).Insert(Shift=c.xlToRight, CopyOrigin=c.xlFormatFromLeftOrAbove)
 
 	def getNextRow(self, sheetName, col, row=1):
-		"""Looks for the next row with something in it. Useful
-		if looking for next record over an unknown number of blank cells. """
+		"""
+		Looks for the next row with something in it. Useful
+		if looking for next record over an unknown number of blank cells.
+		"""
 		sht = self.xlInst.xlBook.Worksheets(sheetName)
 		if sht.Cells(row + 1, col).Value: #and not sht.Cells(row + 1, col).MergeCells
 			return row + 1
@@ -132,18 +148,24 @@ class Sheet(object):
 		return nextrow
 
 	def getCol(self, sheet, col, row1, row2):
-		"""Return a list of values corrosponding to a column in excel"""
+		"""
+		Return a list of values corrosponding to a column in excel.
+		"""
 		newlist = self.getRange(sheet, row1, col, row2, col)
 		return [item[0] for item in newlist]
 
 	def getRow(self, sheet, row, col1, col2):
-		"""Return a list of values corrosponding to row in excel"""
+		"""
+		Return a list of values corrosponding to row in excel.
+		"""
 		newlist = self.getRange(sheet, row, col1, row, col2)
 		return [item for item in newlist]
 
 	def alpha2number(self, columnletters):
-		"""Given a string represeenting the column in excel,
-		return a number representing the column indice."""
+		"""
+		Given a string represeenting the column in excel,
+		return a number representing the column indice.
+		"""
 		offset = 0
 		for letter in columnletters:
 			offset *= 26 # Base counting system
@@ -151,15 +173,19 @@ class Sheet(object):
 		return offset
 
 	def setFormat(self, sheet, row1, col1, row2, col2, format):
-		"""Sets the formating of the cells included in 'range'
-		to the desired format."""
+		"""
+		Sets the formating of the cells included in 'range'
+		to the desired format.
+		"""
 		sht = self.xlInst.xlBook.Worksheets(sheet)
 		sht.Range(sht.Cells(row1, col1),
 				   sht.Cells(row2, col2)).NumberFormat = format
 
 	def duplicate_WBO(self, newobjectname):
-		"""Checks if a chart or sheet with the same
-		name already exists"""
+		"""
+		Checks if a chart or sheet with the same
+		name already exists.
+		"""
 		dupFound = False
 		for sheet in self.xlInst.xlBook.Sheets:
 			if sheet.Name == newobjectname:
@@ -191,7 +217,9 @@ class Sheet(object):
 		#[sht for sht in self.xlInst.xlBook.Sheets][-1].Name = sheetname
 		
 	def addChart(self, chartname, chartType):
-		"""Adds a new chart object (as a sheet), to the right of all existing sheets"""
+		"""
+		Adds a new chart object (as a sheet), to the right of all existing sheets.
+		"""
 		self.remove_dup_WBO(chartname)
 		#lastChart = self.xlInst.getLastWBO("Charts")
 		lastSheet = self.getLastWBO("Sheets") # gets both worksheet and chart objects aka "sheets"
@@ -214,9 +242,11 @@ class Sheet(object):
 		return lastChart
 
 	def getLastWBO(self, WBO, objectName=""):
-		"""Get Last Work Book Object. 
+		"""
+		Get Last Work Book Object. 
 		Objects include: "Sheets", "Charts"
-		@return: a name of the last WBO, or None if nothing found"""
+		@return: a name of the last WBO, or None if nothing found
+		"""
 		lastWBO = None
 		if WBO == "Sheets":
 			lastWBO = self.xlInst.xlBook.Sheets([sht for sht in self.xlInst.xlBook.Sheets][-1].Name)
@@ -235,8 +265,10 @@ class Sheet(object):
 		self.xlInst.xlBook = self.xlInst.xlApp.Workbooks.Add()
 
 	def num_to_let(self, num):
-		'''Converts a number index to a letter index in excel.
-		Uses reccurssion. 1 origin (not 0 origin)'''
+		"""
+		Converts a number index to a letter index in excel.
+		Uses reccurssion. 1 origin (not 0 origin).
+		"""
 		num -= 1 # comment this line to use 0 origin
 		baseA = 65 # where 'A' is in the ascii table
 		if num > 25:
@@ -261,9 +293,11 @@ class Sheet(object):
 				self.xlInst.number_sheets -= 1
 					
 	def rmvSheet(self, removeList=[], keepList=[]):
-		"""Removes all sheets in the removeList, if they exist,
+		"""
+		Removes all sheets in the removeList, if they exist,
 		does not remove a sheet if it appears in the keepList
-		(even if it also appears in the removeList"""
+		(even if it also appears in the removeList.
+		"""
 		if len(removeList) == 0 and len(keepList) == 0:
 			for sht in self.xlInst.xlBook.Sheets:
 				#if sht.Name not in self.xlInst.baseSheets:
@@ -350,7 +384,9 @@ class Sheet(object):
 			sht.Range(sht.Cells(row, col), sht.Cells(row, col+len(valueArray)-1)).Value = valueArray
 
 	def FillDown(self, sheetName, setrow, n, row, col):
-		'''Auto Fills a row down n columns'''
+		"""
+		Auto Fills a row down n columns.
+		"""
 		sht = self.xlInst.xlBook.Worksheets(sheetName)
 		self.xlInst.setRow(sheetName, row, col, setrow)
 		rangestr = "%s%d:%s%d" % (self.num_to_let(col), row, self.num_to_let(col + len(setrow) - 1), row + n)
@@ -366,7 +402,9 @@ class Sheet(object):
 		sht.Range(mergerange).Merge()
 		
 	def autofit(self, sheetName, column):
-		'''Auto adjusts the column widths to achieve the best fit'''
+		"""
+		Auto adjusts the column widths to achieve the best fit.
+		"""
 		sht = self.xlInst.xlBook.Worksheets(sheetName)
 		sht.Columns(self.num_to_let(column)).AutoFit()
 
@@ -392,7 +430,9 @@ class Sheet(object):
 						 pyDate.msec / 1000)
 		
 	def str2DateTime(self, dTStr):
-		"""Convert a datetime string to a datetime object"""
+		"""
+		Convert a datetime string to a datetime object.
+		"""
 		t = time.strptime(dTStr, '%d/%m/%Y %H:%M:%S') # Value error is often associated with month and day being swapped
 		return datetime.datetime(t.tm_year, t.tm_mon, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec)
 
@@ -412,7 +452,9 @@ class Sheet(object):
 		return sht.Range(sht.Cells(row1, col1), sht.Cells(row2, col2))
 
 	def transposeRange(self, data):
-		"""Transposes python lists to/from excel"""
+		"""
+		Transposes python lists to/from excel.
+		"""
 		NoRows = len(data)
 		try:
 			NoCols = len(data[0])
@@ -429,9 +471,11 @@ class Sheet(object):
 		return TransposedRange
 
 	def setRange(self, sheet, topRow, leftCol, data):
-		"""Insert a 2d array starting at given location.
+		"""
+		Insert a 2d array starting at given location.
 		Works out the size needed for itself. Needs to be
-		a list of lists to insert columns."""
+		a list of lists to insert columns.
+		"""
 		bottomRow = topRow + len(data) - 1
 		try:
 			rightCol = leftCol + len(data[0]) - 1
@@ -444,10 +488,12 @@ class Sheet(object):
 		return bottomRow+1, rightCol+1
 		
 	def getContiguousRange(self, sheet, row, col, direction="both"):
-		"""Tracks down and across from top left cell until it
+		"""
+		Tracks down and across from top left cell until it
 		encounters blank cells; returns the non-blank range.
 		Looks at first row and column; blanks at bottom or right
-		are OK and return None within the array"""
+		are OK and return None within the array.
+		"""
 
 		sht = self.xlInst.xlBook.Worksheets(sheet)
 
@@ -547,28 +593,36 @@ class Sheet(object):
 		return ColumnList
 
 	def find_all(self, SheetName, SearchTerm):
-		'''Finds all the cells that match  search string (wild card is asterix)
-		and return them as list of cell references.'''
+		"""
+		Finds all the cells that match  search string (wild card is asterix)
+		and return them as list of cell references.
+		"""
 		results = self.search(shtRange(SheetName, None, 1, 1, 10000, 10000), 
 							  SearchTerm)
 
 	def checkEqual(self, iterator):
-		'''Returns True if all items in the iterable/list are identical when hashed,
+		"""
+		Returns True if all items in the iterable/list are identical when hashed,
 		False otherwise. The problem is that itterable objects that include 2 or more 
-		identical elements followed by uninitialised elements will will return True.'''
+		identical elements followed by uninitialised elements will will return True.
+		"""
 		return len(set(iterator)) <= 1 and len(iterator) >= 2
 			
 	def sort(self, sheet, row=None, col=None, rule=None):
-		'''Returns an array of the supplied range, sorted according to the rule''' 
+		"""
+		Returns an array of the supplied range, sorted according to the rule.
+		"""
 		pass
 
 	def roundUp(self, x):
-		'''Rounds x up to the nearest 10'''
+		"""Rounds x up to the nearest 10.
+		"""
 		return int(math.ceil(x / 10.0)) * 10
 
 	def localMaxima(self, yval):
-		'''Finds all local maxima of a dataset. The output is an array of indexes where the local maxima occur
-		http://stackoverflow.com/questions/17907614/finding-local-maxima-of-xy-data-point-graph-with-numpy''' 
+		"""Finds all local maxima of a dataset. The output is an array of indexes where the local maxima occur
+		http://stackoverflow.com/questions/17907614/finding-local-maxima-of-xy-data-point-graph-with-numpy
+		"""
 
 		yval = np.asarray(yval)
 		gradient = np.diff(yval)
@@ -645,7 +699,9 @@ class Sheet(object):
 		return [x[0] for x in r2.Value] # return 
 		
 	def addSeries(self, shtName, chartNumber, xval, yval):
-		'''Adds a new series to an exsisting chart'''
+		"""
+		Adds a new series to an exsisting chart.
+		"""
 		sht = self.getSheet(feederID=shtName)
 		shape = sht.Shapes(chartNumber)
 		chart = shape.Chart
@@ -658,7 +714,9 @@ class Sheet(object):
 		series.Values = yval # limited to arrays of a max len 16384 (2^14)
 
 	def arrangeCharts(self, feederID, widths, heights, offset, chartOffset=0):
-		'''Arranges the charts in block grid fashion'''
+		"""
+		Arranges the charts in block grid fashion.
+		"""
 		sht = self.getSheet(feederID=feederID)
 		numCharts = sht.ChartObjects().Count
 		
