@@ -27,7 +27,7 @@ if __name__ == "__main__":
 		  author_email='sdo51@uclive.ac.nz',
 		  license='MIT',
 		  packages=['MSOffice', 'MSOffice.Excel', 'MSOffice.Excel.Charts', 'MSOffice.Excel.Worksheets', 'MSOffice.Excel.PivotTables'],
-		  install_requires=['numpy', 'pypiwin32', 'pyodbc', 'six', 'wheel', 'virtualenv'], #pywin32
+		  install_requires=['six', 'wheel', 'virtualenv', 'numpy', 'pypiwin32', 'pyodbc'], # Try 'pywin32' if pypiwin32 fails
 		  dependency_links=[], 
 		  zip_safe=False,
 		  #packages=find_packages()
