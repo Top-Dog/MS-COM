@@ -545,7 +545,7 @@ class Sheet(object):
 		else:
 			r1 = sht.Range(sht.Cells(shtRange.row1, shtRange.col1), sht.Cells(shtRange.row2, shtRange.col2))
 		cell = r1.Find(What=searchTerm, LookAt=c.xlWhole, MatchCase=kwargs.get("MatchCase", False), 
-			LookIn=(c.xlValues if kwargs.get("Formula") else c.xlFormulas))
+			LookIn=(c.xlFormulas if kwargs.get("Formula") else c.xlValues))
 		searchResults = [] # store a list of cells that match the search criteria
 		
 		if cell:
